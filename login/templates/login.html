@@ -1,0 +1,81 @@
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sci-Fi Login Form</title>
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body style="background-image: url('{% static 'images/scifi/login.jpg' %}')">
+  <div class="login-container">
+    <div class="glow-text">Login</div>
+    <form class="login-form" method="post">
+      {% csrf_token %}
+      <div class="input-custom">
+        <img src="{% static 'images/scifi/person.svg' %}" alt="mail_icon" class="input-icon">
+        <input type="text" id="email" name="email" placeholder="email" required>
+        <div class="input-line"></div>
+      </div>
+      <div class="input-custom">
+        <img src="{% static 'images/scifi/lock.svg' %}" alt="Password" class="input-icon">
+        <input type="password" id="password" name="password" placeholder="password" required>
+        <div class="input-line"></div>
+      </div>
+      <button type="submit">
+        <span>Login</span>
+      </button>
+      {% if messages %}
+      <div class="warnings" style="color: #58151c; text-align: center;background-color:#f8d7da;border: 2px solid #f1aeb5;padding:5px;border-radius:6px">
+        {% for message in messages %}
+          {{ message }}<br>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </form>
+  </div>
+</body>
+</html> {% endcomment %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+  <div style="background-image: url('{% static 'images/scifi/frame2.jpg' %}')" class="main-div">
+    <div class="login-container">
+      <div style="background-image: url('{% static 'images/scifi/Group 1.png' %}');background-repeat: no-repeat;background-size: cover;padding:180px 80px 75px 95px;">
+        <div class="glow-text">Login</div>
+        <form class="login-form" method="post">
+          {% csrf_token %}
+          <div class="input-custom">
+            <img src="{% static 'images/scifi/person.svg' %}" alt="mail_icon" class="input-icon">
+            <input type="text" id="email" name="email" placeholder="email" required>
+            <div class="input-line"></div>
+          </div>
+          <div class="input-custom">
+            <img src="{% static 'images/scifi/lock.svg' %}" alt="Password" class="input-icon">
+            <input type="password" id="password" name="password" placeholder="password" required>
+            <div class="input-line"></div>
+          </div>
+          <button type="submit">
+            <span>Login</span>
+          </button>
+          {% if messages %}
+          <div class="warnings" style="color: #58151c; text-align: center;background-color:#f8d7da;border: 2px solid #f1aeb5;padding:5px;border-radius:6px">
+            {% for message in messages %}
+              {{ message }}<br>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

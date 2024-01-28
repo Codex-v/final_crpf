@@ -1,0 +1,57 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100vw;
+}
+
+.main > div {
+  text-align: center;
+  transition: transform 0.3s ease;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 100px 110px;
+}
+
+.main > div:hover {
+  transform: scale(1.1);
+}
+
+
+
+#add-criminal {
+  text-align: center;
+  margin-right: 2rem;
+}
+
+#find-criminal {
+  text-align: center;
+}
+
+img {
+  filter: invert(100%) drop-shadow(0 0 10px #00f);
+}
+
+p {
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  color: white;
+  font-size: 22px;
+  font-weight: bolder;
+  text-shadow: 0 0 2px #00f, 0 0 4px #00f, 0 0 6px #00f, 0 0 8px #00f, 0 0 10px #00f, 0 0 12px #00f, 0 0 14px #00f;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+

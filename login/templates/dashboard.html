@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    <style>
+        .main > div {
+            background-image: url('{% static 'images/scifi/output.png' %}');
+            padding: 100px 100px;
+        }
+    </style>
+</head>
+<body style="background-image: url('{% static 'images/scifi/frame2.jpg' %}');background-repeat: no-repeat;background-size: cover;">
+    <div>
+        <p style="font-size:30px">Welcome To Criminal Detection System</p>
+        <div class="main">    
+            <div id="add-criminal" onclick="redirectToAddCriminal()">
+                <img src="{% static 'images/scifi/user-avatar.png' %}" alt="add_criminal_icon" height="100" width="100">
+                <p>Add Criminal</p>        
+            </div>
+            <div id="find-criminal" onclick="redirectToFaceDetect()">
+                <img src="{% static 'images/scifi/search-profile.png' %}" alt="add_criminal_icon" height="100" width="100">
+                <p>Find Criminal</p>        
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function redirectToFaceDetect() {
+        window.location.href = 'findcriminal';
+    }
+    function redirectToAddCriminal() {
+        window.location.href = 'addcriminal';
+    }
+</script>
+</html>

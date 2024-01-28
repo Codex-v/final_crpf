@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Face Detection System</title>
+    <link rel="stylesheet" href="{% static 'css/find-criminal.css' %}" />
+    <style>
+      #target-image, #database-image, #fingerprint {
+          background-image: url('{% static 'images/scifi/output.png' %}');
+          padding: 100px 150px;
+          background-size: cover;
+          background-size: no-repeat;
+      }
+  </style>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body
+    style="
+      background-image: url('{% static 'images/scifi/frame2.jpg' %}');
+    "
+    id="body"
+  >
+    <div id="database-image">
+      <div class="glow-text">Database Image</div>
+      <div class="blurry-image">
+        <img
+          src="{% static 'images/scifi/1673027002822.jpg' %}"
+          alt="Blurred Image"
+          id="blurryImg"
+          width="400"
+          height="400"
+          class="blur-image-effect"
+        />
+      </div>
+    </div>
+    <div id="target-image" >
+      <div class="glow-text">Target Image</div>
+      <div id="dropZone">
+        <form
+          method="post"
+          enctype="multipart/form-data"
+          id="targetImage_form"
+        >
+          {% csrf_token %}
+          <input
+            type="file"
+            id="fileInput"
+            accept=".jpg, .png"
+            style="display: none"
+            name="image"
+          />
+          <div class="scanner">
+            <img
+              src="{% static 'images/scifi/anonymous.jpg' %}"
+              alt="anonymous"
+              width="175"
+              height="225"
+              id="targetImg"
+            />
+            <div class="scanning-bar"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="fingerprint">
+      <img
+        src="{% static 'images/scifi/fingerprint.gif' %}"
+        alt="Third Frame"
+        width="150"
+        height="200"
+      />
+    </div>
+    <div id="criminal-info">
+      
+    </div>
+  </body>
+  <!-- photo shuffle code -->
+  <script>
+    var assetsPath = "{% static 'images/scifi' %}";
+    const images = [
+      `${assetsPath}/Dawood Ibrahim.jpg`,
+      `${assetsPath}/Lawrence Bishnoi.jpg`,
+      `${assetsPath}/ChottaRajan.jpg`,
+    ];
+    let index = 0;
+    const imgElement = document.getElementById("blurryImg");
+
+    function changeImage() {
+      imgElement.src = images[index];
+      index = (index + 1) % images.length;
+    }
+
+    var imagechanging = setInterval(changeImage, 50);
+  </script>
+  <!-- photo drop code -->
+  <script>
+    const dropZone = document.getElementById("dropZone");
+    const defaultImage = document.getElementById("targetImg");
+    const databaseImage = document.getElementById("blurryImg");
+    const fileInput = document.getElementById("fileInput");
+    const scanningBar = document.querySelector(".scanning-bar");
+
+    dropZone.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file && file.type.match(/^image\//)) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          defaultImage.src = e.target.result;
+          scanningBar.style.display = "block";
+          document.getElementById("database-image").style.visibility = "visible";
+          document.getElementById("fingerprint").style.visibility = "visible";
+          var csrf_token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+          var formData = new FormData();
+          formData.append("csrfmiddlewaretoken", csrf_token);
+          formData.append("image", file);
+          $.ajax({
+            url: "findcriminal",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              console.log(response)
+              databaseImage.src = response.img;
+              databaseImage.classList.remove("blur-image-effect");
+              $('#criminal-info').html(`<p>Full Name: ${response.data.name}</p>
+              <p>Age: ${response.data.age}</p>
+              <p>Gender: ${response.data.gender}</p>
+              <p>Blood Group: ${response.data.bloodgroup}</p>
+              <p>Criminal Record:
+                ${response.data.criminalrecord}
+              </p><br>
+              <div class="form-group">
+                <button type="button"><a href=""><span>Find another criminal</span></a></button>
+              </div>
+              `)
+              clearInterval(imagechanging);
+              document.getElementById("target-image").style.display = "none";
+              document.getElementById("fingerprint").style.display = "none";
+              document.getElementById("body").style.backgroundSize = "cover";
+              document.getElementById("criminal-info").style.display = "block";
+            },
+            error: function (response) {
+              console.log(response)
+              console.log(response.status)
+              if(response.status == 404) {
+                alert("Match Not Found");
+                location.reload();
+              }
+            },
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Please select an image file.");
+      }
+    });
+
+    dropZone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+    });
+
+    dropZone.addEventListener("drop", (event) => {
+      event.preventDefault();
+
+      if (event.dataTransfer.items) {
+        for (let i = 0; i < event.dataTransfer.items.length; i++) {
+          if (
+            event.dataTransfer.items[i].kind === "file" &&
+            event.dataTransfer.items[i].type.match(/^image\//)
+          ) {
+            const file = event.dataTransfer.items[i].getAsFile();
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              defaultImage.src = e.target.result;
+              scanningBar.style.display = "block";
+              document.getElementById("database-image").style.visibility = "visible";
+              document.getElementById("fingerprint").style.visibility = "visible";
+              var csrf_token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+              var formData = new FormData();
+              formData.append("csrfmiddlewaretoken", csrf_token);
+              formData.append("image", file);
+              $.ajax({
+                url: "findcriminal",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                  console.log(response.img);
+                  databaseImage.src = response.img;
+                  databaseImage.classList.remove("blur-image-effect");
+                  $('#criminal-info').html(`<p>Full Name: ${response.data.name}</p>
+                  <p>Age: ${response.data.age}</p>
+                  <p>Gender: ${response.data.gender}</p>
+                  <p>Blood Group: ${response.data.bloodgroup}</p>
+                  <p>Criminal Record:
+                    ${response.data.criminalrecord}
+                  </p>`)
+                  databaseImage.classList.remove("blur-image-effect");
+                  clearInterval(imagechanging);
+                  document.getElementById("target-image").style.display = "none";
+                  document.getElementById("fingerprint").style.display = "none";
+                  document.getElementById("body").style.backgroundSize = "cover";
+                  document.getElementById("criminal-info").style.display = "block";
+                },
+                error: function (xhr, status, error) {
+                  console.error("Error uploading the image:", error);
+                },
+              });
+            };
+            reader.readAsDataURL(file);
+            break;
+          }
+        }
+      }
+    });
+
+    defaultImage.addEventListener("load", () => {
+      if (
+        !defaultImage.src ||
+        defaultImage.src ==
+          window.location.origin + '{% static "images/scifi/anonymous.jpg" %}'
+      ) {
+        scanningBar.style.display = "none";
+        document.getElementById("database-image").style.visibility = "hidden";
+        document.getElementById("fingerprint").style.visibility = "hidden";
+      } else {
+        scanningBar.style.display = "block";
+        document.getElementById("database-image").style.visibility = "visible";
+        document.getElementById("fingerprint").style.visibility = "visible";
+        document.getElementById("body").style.backgroundSize = "cover";
+      }
+    });
+  </script>
+</html>
