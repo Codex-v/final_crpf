@@ -16,6 +16,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FACEDIRECTORY_DIR = os.path.join(BASE_DIR, 'facedetect')
 
@@ -99,34 +101,27 @@ WSGI_APPLICATION = "facialReco.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'faceDT',
-        'USER': 'Admin',
-        'PASSWORD': 'BrainisemptyPlease give me coffe@2024',
-        'HOST': '103.21.160.164',
-        'PORT': '5890',
-
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-        },
-    },
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'mssql',
 #         'NAME': 'faceDT',
-#         'HOST': 'DARGON-MSI\\SQLEXPRESS',  # Use double backslashes for the backslash in the server name
+#         'USER': 'Admin',
+#         'PASSWORD': 'BrainisemptyPlease give me coffe@2024',
+#         'HOST': '103.21.160.164',
+#         'PORT': '5890',
+
 #         'OPTIONS': {
 #             'driver': 'ODBC Driver 17 for SQL Server',
-#             'MARS_Connection': True,
-#             'Trusted_Connection': 'yes',  # Use Windows Authentication
 #         },
-#     }
+#     },
 # }
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 
 # Password validation
